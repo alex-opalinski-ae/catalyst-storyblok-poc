@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+### Minor Changes
+
+- [#2593](https://github.com/bigcommerce/catalyst/pull/2593) [`9e2f992`](https://github.com/bigcommerce/catalyst/commit/9e2f992a3f6b6e3fcd45a823343859403cda9542) Thanks [@hunterbecton](https://github.com/hunterbecton)! - Create alias for variables for button and button-link components
+
+### Patch Changes
+
+- [#2621](https://github.com/bigcommerce/catalyst/pull/2621) [`eb2d4e1`](https://github.com/bigcommerce/catalyst/commit/eb2d4e16e61c5822111fa50d8bc27db86cd5e9c4) Thanks [@agurtovoy](https://github.com/agurtovoy)! - Fix locale switcher on localized Makeswift pages with different paths
+
 ## 1.2.0
 
 ### Minor Changes
