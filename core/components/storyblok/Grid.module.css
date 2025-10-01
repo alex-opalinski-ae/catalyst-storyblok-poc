@@ -1,0 +1,7 @@
+.grid {
+    display: flex;
+    gap: 1rem;
+}
+.gridItem {
+    flex-grow: 1;
+}

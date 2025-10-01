@@ -27,6 +27,9 @@ import {
   getStreamableProduct,
 } from './page-data';
 
+import { getStoryblokApi } from '~/lib/storyblok';
+import { StoryblokStory } from '@storyblok/react/rsc';
+
 interface Props {
   params: Promise<{ slug: string; locale: string }>;
   searchParams: Promise<SearchParams>;
@@ -295,6 +298,23 @@ export default async function Product({ params, searchParams }: Props) {
     };
   });
 
+  const storyblokApi = getStoryblokApi();
+
+  let links = await storyblokApi.get(`cdn/links`, {
+    version: 'draft',
+    starts_with: baseProduct.path.replaceAll('/',''),
+  }); 
+  let storkblokData;
+
+  if (links.total) {
+    storkblokData = await storyblokApi.get(`cdn/stories${baseProduct.path}`, {
+      version: 'draft',
+    });
+    storkblokData = storkblokData.data;
+  } else {
+    storkblokData = undefined;
+  }
+
   return (
     <>
       <ProductAnalyticsProvider data={streamableAnalyticsData}>
@@ -334,6 +354,18 @@ export default async function Product({ params, searchParams }: Props) {
         />
       </ProductAnalyticsProvider>
 
+      {
+        storkblokData ?
+        <>
+          <hr />
+          <h2 className="page-heading">
+            Storyblok Content
+          </h2>
+          <StoryblokStory story={storkblokData.story} />
+          <hr />
+        </>
+        : ''
+      }
       <FeaturedProductCarousel
         cta={{ label: t('RelatedProducts.cta'), href: '/shop-all' }}
         emptyStateSubtitle={t('RelatedProducts.browseCatalog')}

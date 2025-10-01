@@ -29,6 +29,8 @@ import { getToastNotification } from '../../lib/server-toast';
 
 import '~/lib/makeswift/components';
 
+import StoryblokProvider from "~/components/storyblok/StoryblokProvider";
+
 const RootLayoutMetadataQuery = graphql(
   `
     query RootLayoutMetadataQuery {
@@ -120,6 +122,7 @@ export default async function RootLayout({ params, children }: Props) {
 
   return (
     <MakeswiftProvider siteVersion={siteVersion}>
+      <StoryblokProvider>
       <html className={clsx(fonts.map((f) => f.variable))} lang={locale}>
         <head>
           <SiteTheme />
@@ -146,6 +149,7 @@ export default async function RootLayout({ params, children }: Props) {
           <ScriptManagerScripts scripts={data.site.content.footerScripts} strategy="lazyOnload" />
         </body>
       </html>
+      </StoryblokProvider>
     </MakeswiftProvider>
   );
 }
