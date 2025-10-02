@@ -22,15 +22,11 @@ export default async function Home({ params }: Props) {
 
   return (
     <div className="pageTest">
-      <h2>
-        MakeSwift Content
-      </h2>
-      <MakeswiftPage locale={locale} path="/" />
-      <hr />
-      <h2 className="page-heading">
-        Storyblok Content
-      </h2>
       <StoryblokStory story={data.story} />
+
+      <br /><br /><hr /><br /><br />
+
+      <MakeswiftPage locale={locale} path="/" />
     </div>
   )
 }

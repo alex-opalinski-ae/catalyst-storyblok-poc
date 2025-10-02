@@ -25,8 +25,6 @@ export default function Product({ blok, className, badge, ...props }) {
   }
 
   const product = bcProductToVibesProduct(data);  
-    
-  console.log('product',product);
 
   return (
     <ProductCard

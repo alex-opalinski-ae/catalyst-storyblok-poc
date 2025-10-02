@@ -1,9 +1,9 @@
-import Page from "~/components/storyblok/Page";
-import Feature from "~/components/storyblok/Feature";
-import Grid from "~/components/storyblok/Grid";
-import Teaser from "~/components/storyblok/Teaser";
-import Image from "~/components/storyblok/Image";
-import Product from "~/components/storyblok/Product";
+import Page from "~/components/storyblok/Page/Page";
+import Grid from "~/components/storyblok/Grid/Grid";
+import Image from "~/components/storyblok/Image/Image";
+import Product from "~/components/storyblok/Product/Product";
+import Text from "~/components/storyblok/Text/Text";
+import Container from "~/components/storyblok/Container/Container"
 
 import { apiPlugin, storyblokInit } from '@storyblok/react/rsc';
 
@@ -12,11 +12,11 @@ export const getStoryblokApi = storyblokInit({
     use: [apiPlugin],
     components: {
 		page: Page,
-		feature: Feature,
-		grid: Grid,
-		teaser: Teaser,
+        container: Container,
+        grid: Grid,
         image: Image,
         product: Product,
+        text: Text,
 	},
     apiOptions: {
         region: 'eu',

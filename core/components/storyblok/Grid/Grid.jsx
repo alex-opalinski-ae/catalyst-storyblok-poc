@@ -1,12 +1,16 @@
 import { StoryblokServerComponent } from '@storyblok/react/rsc'
 
-import styles from './Grid.module.css';
-
 export default function Grid({ blok }) {
+	console.log('Grid({ blok }),',blok);
+	
+	let className = `
+		grid grid-cols-${blok.columnCount} gap-x-${blok.horizontalGap} gap-y-${blok.verticalGap}
+	`
+
 	return (
-		<div className={styles.grid}>
+		<div className={className}>
 			{blok.columns?.map((nestedBlok) => (
-				<div className={styles.gridItem} key={nestedBlok._uid}>
+				<div key={nestedBlok._uid}>
 					<StoryblokServerComponent blok={nestedBlok} />
 				</div>
 			))}
