@@ -7,7 +7,7 @@ import {
   CarouselScrollbar,
 } from '@/vibes/soul/primitives/carousel/index';
 
-import styles from './HeroCarousel.module.css'; 
+import styles from './HeroCarousel.module.css'; // fix typo
 
 export default function HeroCarousel({ 
     blok,
