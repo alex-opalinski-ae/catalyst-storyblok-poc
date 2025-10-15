@@ -23,6 +23,9 @@ import { fetchFacetedSearch } from '../../fetch-faceted-search';
 import { CategoryViewed } from './_components/category-viewed';
 import { getCategoryPageData } from './page-data';
 
+import { getStoryblokApi } from '~/lib/storyblok';
+import { StoryblokStory } from '@storyblok/react/rsc';
+
 const getCachedCategory = cache((categoryId: number) => {
   return {
     category: categoryId,
@@ -239,12 +242,43 @@ export default async function Category(props: Props) {
     }));
   });
 
+  const storyblokApi = getStoryblokApi();
+  const tree = categoryTree[0];
+
+  console.log('categoryTree[0].path: ',tree.path);
+
+  let links = await storyblokApi.get(`cdn/links`, {
+    version: 'draft',
+    starts_with: tree.path.replaceAll('/',''),
+  }); 
+  let storkblokData;
+
+  if (links.total) {
+    storkblokData = await storyblokApi.get(`cdn/stories${tree.path}`, {
+      version: 'draft',
+    });
+    storkblokData = storkblokData.data;
+  } else {
+    storkblokData = undefined;
+  }
+
+  console.log('storkblokData:',storkblokData);
+
   return (
     <>
       <Slot
         label={`${category.name} top content`}
         snapshotId={`category-${categoryId}-top-content`}
       />
+
+      {
+        storkblokData ?
+        <>
+          <StoryblokStory story={storkblokData.story} location='header' />
+        </>        
+        : ''
+      }
+
       <ProductsListSection
         breadcrumbs={breadcrumbs}
         compareLabel={t('Compare.compare')}
@@ -286,6 +320,14 @@ export default async function Category(props: Props) {
       <Stream value={streamableFacetedSearch}>
         {(search) => <CategoryViewed category={category} products={search.products.items} />}
       </Stream>
+      
+      {
+        storkblokData ?
+        <>
+          <StoryblokStory story={storkblokData.story} location='footer' />
+        </>        
+        : ''
+      }
     </>
   );
 }

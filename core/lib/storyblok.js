@@ -1,4 +1,5 @@
 import Page from "~/components/storyblok/Page/Page";
+import CategoryPage from "~/components/storyblok/CategoryPage/CategoryPage";
 import Grid from "~/components/storyblok/Grid/Grid";
 import Image from "~/components/storyblok/Image/Image";
 import Product from "~/components/storyblok/Product/Product";
@@ -14,6 +15,7 @@ export const getStoryblokApi = storyblokInit({
     use: [apiPlugin],
     components: {
 		page: Page,
+        categoryPage: CategoryPage,
         container: Container,
         grid: Grid,
         image: Image,

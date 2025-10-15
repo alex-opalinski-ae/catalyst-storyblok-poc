@@ -357,12 +357,7 @@ export default async function Product({ params, searchParams }: Props) {
       {
         storkblokData ?
         <>
-          <hr />
-          <h2 className="page-heading">
-            Storyblok Content
-          </h2>
           <StoryblokStory story={storkblokData.story} />
-          <hr />
         </>
         : ''
       }
