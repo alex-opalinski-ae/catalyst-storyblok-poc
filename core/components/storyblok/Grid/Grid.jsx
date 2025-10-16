@@ -1,8 +1,6 @@
 import { StoryblokServerComponent } from '@storyblok/react/rsc'
 
 export default function Grid({ blok }) {
-	console.log('Grid({ blok }),',blok);
-	
 	let className = `
 		grid grid-cols-${blok.columnCount} gap-x-${blok.horizontalGap} gap-y-${blok.verticalGap}
 	`

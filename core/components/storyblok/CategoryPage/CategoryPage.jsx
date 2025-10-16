@@ -4,8 +4,6 @@ import {
 } from '@storyblok/react/rsc';
 
 export default function CategoryPage({ blok, location }) {
-	console.log('blok:', blok);
-	
 	if (location === 'header') {
 		return (
 			<>

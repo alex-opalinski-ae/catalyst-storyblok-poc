@@ -1,8 +1,6 @@
 import { StoryblokServerComponent } from '@storyblok/react/rsc'
 
 export default function Container({ blok }) {
-	console.log('Container({ blok })',blok.backgroundColor.color);
-	
 	return (
 		<div 
 			className='h-full'

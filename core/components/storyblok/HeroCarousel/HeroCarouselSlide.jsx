@@ -2,8 +2,6 @@ import { StoryblokServerComponent } from '@storyblok/react/rsc'
 import styles from './HeroCarouselSlide.module.css'; 
 
 export default function HeroCarouselSlide({ blok }) {
-    console.log('HeroCarouselSlide({ blok }),',blok);
-
     return (
         <div className={styles.slide}>
             <div className={styles.background}>

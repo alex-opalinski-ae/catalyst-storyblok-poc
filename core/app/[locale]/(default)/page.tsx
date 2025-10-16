@@ -23,15 +23,11 @@ export default async function Home({ params }: Props) {
   return (
     <div className="pageTest">
       <StoryblokStory story={data.story} />
-
-      <br /><br /><hr /><br /><br />
-
-      <MakeswiftPage locale={locale} path="/" />
     </div>
   )
 }
 
 export async function fetchData() {
 	const storyblokApi = getStoryblokApi();
-	return await storyblokApi.get(`cdn/stories/home`, { version: 'draft' });
+	return await storyblokApi.get(`cdn/stories/pages/home`, { version: 'draft' });
 }

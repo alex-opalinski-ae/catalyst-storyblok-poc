@@ -1,7 +1,6 @@
 import { storyblokEditable } from "@storyblok/react/rsc";
 
 export default function Text({ blok }) {
-	console.log('Text({ blok })',blok);
 	const Tag = blok.block;
 	
 	return (

@@ -15,8 +15,6 @@ export default function HeroCarousel({
     showArrows = true,
     colorScheme,
 }) {
-    console.log('HeroCarousel({ blok }),',blok);
-
     return (
         <Carousel>
             <CarouselContent className="HeroCarousel-track mb-10">

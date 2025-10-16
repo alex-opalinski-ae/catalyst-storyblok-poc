@@ -249,12 +249,12 @@ export default async function Category(props: Props) {
 
   let links = await storyblokApi.get(`cdn/links`, {
     version: 'draft',
-    starts_with: tree.path.replaceAll('/',''),
+    starts_with: `pages/category/${tree.path.replaceAll('/','')}`,
   }); 
   let storkblokData;
-
+  
   if (links.total) {
-    storkblokData = await storyblokApi.get(`cdn/stories${tree.path}`, {
+    storkblokData = await storyblokApi.get(`cdn/stories/pages/category${tree.path}`, {
       version: 'draft',
     });
     storkblokData = storkblokData.data;
@@ -266,10 +266,6 @@ export default async function Category(props: Props) {
 
   return (
     <>
-      <Slot
-        label={`${category.name} top content`}
-        snapshotId={`category-${categoryId}-top-content`}
-      />
 
       {
         storkblokData ?
@@ -312,10 +308,6 @@ export default async function Category(props: Props) {
         sortParamName="sort"
         title={category.name}
         totalCount={streamableTotalCount}
-      />
-      <Slot
-        label={`${category.name} bottom content`}
-        snapshotId={`category-${categoryId}-bottom-content`}
       />
       <Stream value={streamableFacetedSearch}>
         {(search) => <CategoryViewed category={category} products={search.products.items} />}

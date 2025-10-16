@@ -12,7 +12,8 @@ import { logoTransformer } from '~/data-transformers/logo-transformer';
 import { routing } from '~/i18n/routing';
 import { getCartId } from '~/lib/cart';
 import { getPreferredCurrencyCode } from '~/lib/currency';
-import { SiteHeader as HeaderSection } from '~/lib/makeswift/components/site-header';
+import { HeaderSection } from '@/vibes/soul/sections/header-section';
+import { getStoryblokApi } from '~/lib/storyblok';
 
 import { search } from './_actions/search';
 import { switchCurrency } from './_actions/switch-currency';
@@ -69,11 +70,17 @@ const getHeaderData = cache(async () => {
   return readFragment(HeaderFragment, response).site;
 });
 
+export async function fetchStoryblokData() {
+	const storyblokApi = getStoryblokApi();
+	return await storyblokApi.get(`cdn/stories/header`, { version: 'draft' });
+}
+
 export const Header = async () => {
   const t = await getTranslations('Components.Header');
   const locale = await getLocale();
 
   const data = await getHeaderData();
+  const storyblokData = await fetchStoryblokData();
 
   const logo = data.settings ? logoTransformer(data.settings) : '';
 
@@ -81,7 +88,7 @@ export const Header = async () => {
     id: enabledLocales,
     label: enabledLocales.toLocaleUpperCase(),
   }));
-
+  
   const currencies = data.currencies.edges
     ? data.currencies.edges
         // only show transactional currencies for now until cart prices can be rendered in display currencies
@@ -103,8 +110,7 @@ export const Header = async () => {
    Will require modification of navigation menu styles to accommodate the additional categories.
    */
     const slicedTree = categoryTree.slice(0, 6);
-
-    return slicedTree.map(({ name, path, children }) => ({
+    const categories = slicedTree.map(({ name, path, children }) => ({
       label: name,
       href: path,
       groups: children.map((firstChild) => ({
@@ -116,6 +122,22 @@ export const Header = async () => {
         })),
       })),
     }));
+
+    const navLinks = storyblokData.data.story.content.navLinks.map((link) => ({
+      label: link.name,
+      href: link.link ? link.link.url : '#',
+      groups: link.children ? link.children.map((firstChild) => ({
+        label: firstChild.name,
+        href: firstChild.link.url,
+        links: firstChild.children ? firstChild.children.map((secondChild) => ({
+          label: secondChild.name,
+          href: secondChild.link.url,
+        })) : [],
+      })) : [],
+    }));
+    
+    const fullNav = categories.concat(navLinks)
+    return fullNav;
   });
 
   const streamableCartCount = Streamable.from(async () => {
