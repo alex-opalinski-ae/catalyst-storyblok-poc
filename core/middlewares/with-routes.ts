@@ -72,17 +72,14 @@ const getRoute = async (path: string, channelId?: string) => {
     channelId,
   });
 
-  console.log('>>>>>getRoute 0---0 response 0---0', response.data.site.route);
-  console.log('>>>>>getRoute 0---0 !response.data.site.route 0---0', !response.data.site.route, `content${path}`);
   let output = response.data.site.route
 
-  if (!response.data.site.route.node) {
+  if (!response.data.site.route.node && path !== '/') {
     const storyblokApi = getStoryblokApi();
     let storyblokResponse = await storyblokApi.get(`cdn/links`, {
       version: 'draft',
       starts_with: `content${path}`,
     }); 
-    console.log('>>>>>getRoute 0---0 storyblokResponse 0---0',storyblokResponse.total);
 
     if (storyblokResponse.total) {
       output = {
@@ -212,8 +209,6 @@ const updateRouteCache = async (
 
   event.waitUntil(kv.set(kvKey(pathname, channelId), routeCache));
 
-  console.log('>>>>>updateRouteCache 0---0 routeCache 0---0', routeCache);
-
   return routeCache;
 };
 
@@ -256,16 +251,13 @@ const getRouteInfo = async (request: NextRequest, event: NextFetchEvent) => {
   try {
     // For route resolution parity, we need to also include query params, otherwise certain redirects will not work.
     const pathname = clearLocaleFromPath(request.nextUrl.pathname + request.nextUrl.search, locale);
-    console.log('>>>>>getRouteInfo 0---0 pathname 0---0',pathname);
     
-    // let [routeCache, statusCache] = await kv.mget<RouteCache | StorefrontStatusCache>(
-    //   kvKey(pathname, channelId),
-    //   kvKey(STORE_STATUS_KEY, channelId),
-    // );
-    let routeCache;
-    let statusCache;
-
-    console.log('>>>>>getRouteInfo 0---0 routeCache 0---0',routeCache);
+    let [routeCache, statusCache] = await kv.mget<RouteCache | StorefrontStatusCache>(
+      kvKey(pathname, channelId),
+      kvKey(STORE_STATUS_KEY, channelId),
+    );
+    // let routeCache;
+    // let statusCache;
 
     // If caches are old, update them in the background and return the old data (SWR-like behavior)
     // If cache is missing, update it and return the new data, but write to KV in the background
@@ -283,8 +275,6 @@ const getRouteInfo = async (request: NextRequest, event: NextFetchEvent) => {
 
     const parsedRoute = RouteCacheSchema.safeParse(routeCache);
     const parsedStatus = StorefrontStatusCacheSchema.safeParse(statusCache);
-
-    console.log('>>>>>getRouteInfo 0---0 parsedRoute 0---0',parsedRoute);
 
     return {
       route: parsedRoute.success ? parsedRoute.data.route : undefined,
@@ -306,8 +296,6 @@ export const withRoutes: MiddlewareFactory = () => {
     const locale = request.headers.get('x-bc-locale') ?? '';
 
     const { route, status } = await getRouteInfo(request, event);
-
-    console.log('>>>>>withRoutes 0---0 route 0---0:',route);
 
     if (status === 'MAINTENANCE') {
       // 503 status code not working - https://github.com/vercel/next.js/issues/50155
@@ -390,7 +378,6 @@ export const withRoutes: MiddlewareFactory = () => {
 
       case `StoryblokPage`: {
         url = `/${locale}/storyblok/${node.id}`;
-        console.log('>>>>>withRoutes 0---0 url 0---0', url);
         break
       }
 
@@ -429,9 +416,6 @@ export const withRoutes: MiddlewareFactory = () => {
     const rewriteUrl = new URL(url, request.url);
 
     rewriteUrl.search = request.nextUrl.search;
-
-    console.log(`0---------------------------------------0`);
-    
 
     return NextResponse.rewrite(rewriteUrl);
   };
