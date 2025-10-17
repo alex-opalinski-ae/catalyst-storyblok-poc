@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@storyblok/preview-bridge':
+        specifier: ^2.1.6
+        version: 2.1.6
       '@storyblok/react':
         specifier: ^5.4.13
         version: 5.4.13(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3797,6 +3800,9 @@ packages:
 
   '@storyblok/js@4.3.1':
     resolution: {integrity: sha512-6aPhjGuHWrObLfhW4/RPl9X/T/CdahDiEzbV6TKcYm0lseDq1XvMb8S3c5HmwVJNL3vsk4AiYuc51Ko4fAhOmg==}
+
+  '@storyblok/preview-bridge@2.1.6':
+    resolution: {integrity: sha512-fj8tV3ZaPJGyqqfpobzezIpm/LZZr1hW6J2eqhQkC1OVdA5PJNNw8eEnrMTXgLDn/Wrpd28NYCrY3UNXYJgmjg==}
 
   '@storyblok/react@5.4.13':
     resolution: {integrity: sha512-3HsTOSgsnFe/MsZ9Buf82Dfu/eqgokfi/LKP2Fx5JvZeDZ9nGH6XEynd9iq3YTt3yNyNZamO08az+7OGN/UFCw==}
@@ -8198,6 +8204,9 @@ packages:
     engines: {node: '>=18'}
     deprecated: < 24.10.2 is no longer supported
     hasBin: true
+
+  pure-parse@0.0.0-beta.8:
+    resolution: {integrity: sha512-9i10sb9eVsQ3RioUa8M5Y96HKW2Nw181xRdBDIwwkff9mOc4RxswXVfy2+76OgwOi6p0f8EqxlMZeK1paHfE2g==}
 
   pure-rand@6.1.0:
     resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
@@ -14017,6 +14026,10 @@ snapshots:
       '@storyblok/richtext': 3.8.1
       storyblok-js-client: 7.1.5
 
+  '@storyblok/preview-bridge@2.1.6':
+    dependencies:
+      pure-parse: 0.0.0-beta.8
+
   '@storyblok/react@5.4.13(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@storyblok/js': 4.3.1
@@ -19102,6 +19115,8 @@ snapshots:
       - supports-color
       - typescript
       - utf-8-validate
+
+  pure-parse@0.0.0-beta.8: {}
 
   pure-rand@6.1.0: {}
 

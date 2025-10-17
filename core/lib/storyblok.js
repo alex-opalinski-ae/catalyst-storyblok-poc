@@ -5,7 +5,7 @@ import Image from "~/components/storyblok/Image/Image";
 import Product from "~/components/storyblok/Product/Product";
 import Text from "~/components/storyblok/Text/Text";
 import Container from "~/components/storyblok/Container/Container"
-import HeroCarousel from "~/components/storyblok/HeroCarousel/HeroCarousel" // fix typo
+import HeroCarousel from "~/components/storyblok/HeroCarousel/HeroCarousel"
 import HeroCarouselSlide from "~/components/storyblok/HeroCarousel/HeroCarouselSlide"
 
 import { apiPlugin, storyblokInit } from '@storyblok/react/rsc';

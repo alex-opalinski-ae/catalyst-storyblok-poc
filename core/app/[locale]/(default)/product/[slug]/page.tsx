@@ -11,7 +11,7 @@ import { pricesTransformer } from '~/data-transformers/prices-transformer';
 import { productCardTransformer } from '~/data-transformers/product-card-transformer';
 import { productOptionsTransformer } from '~/data-transformers/product-options-transformer';
 import { getPreferredCurrencyCode } from '~/lib/currency';
-import { ProductDetail } from '~/lib/makeswift/components/product-detail';
+import { ProductDetail, ProductDetailSkeleton } from '@/vibes/soul/sections/product-detail';
 
 import { addToCart } from './_actions/add-to-cart';
 import { ProductAnalyticsProvider } from './_components/product-analytics-provider';
