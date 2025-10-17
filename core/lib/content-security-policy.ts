@@ -2,7 +2,7 @@ import builder from 'content-security-policy-builder';
 
 const makeswiftEnabled = !!process.env.MAKESWIFT_SITE_API_KEY;
 
-const makeswiftBaseUrl = process.env.MAKESWIFT_BASE_URL || 'https://app.makeswift.com';
+const makeswiftBaseUrl = process.env.MAKESWIFT_BASE_URL || 'https://app.storyblok.com';
 
 const frameAncestors = makeswiftEnabled ? makeswiftBaseUrl : 'none';
 
