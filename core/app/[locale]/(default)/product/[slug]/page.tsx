@@ -302,12 +302,12 @@ export default async function Product({ params, searchParams }: Props) {
 
   let links = await storyblokApi.get(`cdn/links`, {
     version: 'draft',
-    starts_with: `pages/product/${baseProduct.path.replaceAll('/','')}`,
+    starts_with: `product/${baseProduct.path.replaceAll('/','')}`,
   }); 
   let storkblokData;
 
   if (links.total) {
-    storkblokData = await storyblokApi.get(`cdn/stories/pages/product${baseProduct.path}`, {
+    storkblokData = await storyblokApi.get(`cdn/stories/product${baseProduct.path}`, {
       version: 'draft',
     });
     storkblokData = storkblokData.data;

@@ -249,20 +249,18 @@ export default async function Category(props: Props) {
 
   let links = await storyblokApi.get(`cdn/links`, {
     version: 'draft',
-    starts_with: `pages/category/${tree.path.replaceAll('/','')}`,
+    starts_with: `category/${tree.path.replaceAll('/','')}`,
   }); 
   let storkblokData;
   
   if (links.total) {
-    storkblokData = await storyblokApi.get(`cdn/stories/pages/category${tree.path}`, {
+    storkblokData = await storyblokApi.get(`cdn/stories/category${tree.path}`, {
       version: 'draft',
     });
     storkblokData = storkblokData.data;
   } else {
     storkblokData = undefined;
   }
-
-  console.log('storkblokData:',storkblokData);
 
   return (
     <>

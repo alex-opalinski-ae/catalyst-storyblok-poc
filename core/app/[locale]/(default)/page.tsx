@@ -29,5 +29,5 @@ export default async function Home({ params }: Props) {
 
 export async function fetchData() {
 	const storyblokApi = getStoryblokApi();
-	return await storyblokApi.get(`cdn/stories/pages/home`, { version: 'draft' });
+	return await storyblokApi.get(`cdn/stories/home`, { version: 'draft' });
 }

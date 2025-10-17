@@ -10,6 +10,8 @@ import { kvKey, STORE_STATUS_KEY } from '~/lib/kv/keys';
 
 import { kv } from '../lib/kv';
 
+import { getStoryblokApi } from '~/lib/storyblok';
+
 import { type MiddlewareFactory } from './compose-middlewares';
 
 const GetRouteQuery = graphql(`
@@ -70,7 +72,28 @@ const getRoute = async (path: string, channelId?: string) => {
     channelId,
   });
 
-  return response.data.site.route;
+  console.log('>>>>>getRoute 0---0 response 0---0', response.data.site.route);
+  console.log('>>>>>getRoute 0---0 !response.data.site.route 0---0', !response.data.site.route, `content${path}`);
+  let output = response.data.site.route
+
+  if (!response.data.site.route.node) {
+    const storyblokApi = getStoryblokApi();
+    let storyblokResponse = await storyblokApi.get(`cdn/links`, {
+      version: 'draft',
+      starts_with: `content${path}`,
+    }); 
+    console.log('>>>>>getRoute 0---0 storyblokResponse 0---0',storyblokResponse.total);
+
+    if (storyblokResponse.total) {
+      output = {
+        redirect: null,
+        node: { __typename: 'StoryblokPage', id: path.replaceAll('/',''), entityId: 0 }
+      }
+    }
+  }
+
+
+  return output;
 };
 
 const getRawWebPageContentQuery = graphql(`
@@ -161,6 +184,7 @@ const NodeSchema = z.union([
   z.object({ __typename: z.literal('Brand'), entityId: z.number() }),
   z.object({ __typename: z.literal('ContactPage'), id: z.string() }),
   z.object({ __typename: z.literal('NormalPage'), id: z.string() }),
+  z.object({ __typename: z.literal('StoryblokPage'), id: z.string() }),
   z.object({ __typename: z.literal('RawHtmlPage'), id: z.string() }),
   z.object({ __typename: z.literal('Blog'), id: z.string() }),
   z.object({ __typename: z.literal('BlogPost'), entityId: z.number() }),
@@ -187,6 +211,8 @@ const updateRouteCache = async (
   };
 
   event.waitUntil(kv.set(kvKey(pathname, channelId), routeCache));
+
+  console.log('>>>>>updateRouteCache 0---0 routeCache 0---0', routeCache);
 
   return routeCache;
 };
@@ -230,11 +256,16 @@ const getRouteInfo = async (request: NextRequest, event: NextFetchEvent) => {
   try {
     // For route resolution parity, we need to also include query params, otherwise certain redirects will not work.
     const pathname = clearLocaleFromPath(request.nextUrl.pathname + request.nextUrl.search, locale);
+    console.log('>>>>>getRouteInfo 0---0 pathname 0---0',pathname);
+    
+    // let [routeCache, statusCache] = await kv.mget<RouteCache | StorefrontStatusCache>(
+    //   kvKey(pathname, channelId),
+    //   kvKey(STORE_STATUS_KEY, channelId),
+    // );
+    let routeCache;
+    let statusCache;
 
-    let [routeCache, statusCache] = await kv.mget<RouteCache | StorefrontStatusCache>(
-      kvKey(pathname, channelId),
-      kvKey(STORE_STATUS_KEY, channelId),
-    );
+    console.log('>>>>>getRouteInfo 0---0 routeCache 0---0',routeCache);
 
     // If caches are old, update them in the background and return the old data (SWR-like behavior)
     // If cache is missing, update it and return the new data, but write to KV in the background
@@ -252,6 +283,8 @@ const getRouteInfo = async (request: NextRequest, event: NextFetchEvent) => {
 
     const parsedRoute = RouteCacheSchema.safeParse(routeCache);
     const parsedStatus = StorefrontStatusCacheSchema.safeParse(statusCache);
+
+    console.log('>>>>>getRouteInfo 0---0 parsedRoute 0---0',parsedRoute);
 
     return {
       route: parsedRoute.success ? parsedRoute.data.route : undefined,
@@ -273,6 +306,8 @@ export const withRoutes: MiddlewareFactory = () => {
     const locale = request.headers.get('x-bc-locale') ?? '';
 
     const { route, status } = await getRouteInfo(request, event);
+
+    console.log('>>>>>withRoutes 0---0 route 0---0:',route);
 
     if (status === 'MAINTENANCE') {
       // 503 status code not working - https://github.com/vercel/next.js/issues/50155
@@ -353,6 +388,12 @@ export const withRoutes: MiddlewareFactory = () => {
         break;
       }
 
+      case `StoryblokPage`: {
+        url = `/${locale}/storyblok/${node.id}`;
+        console.log('>>>>>withRoutes 0---0 url 0---0', url);
+        break
+      }
+
       case 'ContactPage': {
         url = `/${locale}/webpages/${node.id}/contact/`;
         break;
@@ -388,6 +429,9 @@ export const withRoutes: MiddlewareFactory = () => {
     const rewriteUrl = new URL(url, request.url);
 
     rewriteUrl.search = request.nextUrl.search;
+
+    console.log(`0---------------------------------------0`);
+    
 
     return NextResponse.rewrite(rewriteUrl);
   };

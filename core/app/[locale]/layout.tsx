@@ -121,9 +121,11 @@ export default async function RootLayout({ params, children }: Props) {
   setRequestLocale(locale);
 
   return (
+    <MakeswiftProvider siteVersion={siteVersion}>
       <StoryblokProvider>
       <html className={clsx(fonts.map((f) => f.variable))} lang={locale}>
         <head>
+          <SiteTheme />
           <ScriptManagerScripts
             scripts={data.site.content.headerScripts}
             strategy="afterInteractive"
@@ -148,6 +150,7 @@ export default async function RootLayout({ params, children }: Props) {
         </body>
       </html>
       </StoryblokProvider>
+    </MakeswiftProvider>
   );
 }
 
