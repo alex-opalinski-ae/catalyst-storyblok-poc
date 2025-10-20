@@ -78,8 +78,8 @@ const getRoute = async (path: string, channelId?: string) => {
     const storyblokApi = getStoryblokApi();
     let storyblokResponse = await storyblokApi.get(`cdn/links`, {
       version: 'draft',
-      starts_with: `content${path}`,
-    }); 
+      starts_with: `${path.replaceAll('/','')}`,
+    });
 
     if (storyblokResponse.total) {
       output = {

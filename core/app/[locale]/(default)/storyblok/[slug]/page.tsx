@@ -26,7 +26,7 @@ export default async function WebPageLayout({ params, children }: Props) {
 
   let links = await storyblokApi.get(`cdn/links`, {
     version: 'draft',
-    starts_with: `content/${slug}`,
+    starts_with: `${slug}`,
   }); 
   let storkblokData;
   
@@ -34,7 +34,7 @@ export default async function WebPageLayout({ params, children }: Props) {
   
 
   if (links.total) {
-    storkblokData = await storyblokApi.get(`cdn/stories/content/${slug}`, {
+    storkblokData = await storyblokApi.get(`cdn/stories/${slug}`, {
       version: 'draft',
     });
     storkblokData = storkblokData.data;
