@@ -245,16 +245,14 @@ export default async function Category(props: Props) {
   const storyblokApi = getStoryblokApi();
   const tree = categoryTree[0];
 
-  console.log('categoryTree[0].path: ',tree.path);
-
   let links = await storyblokApi.get(`cdn/links`, {
     version: 'draft',
-    starts_with: `category/${tree.path.replaceAll('/','')}`,
+    starts_with: `category/${categoryId}`,
   }); 
   let storkblokData;
   
   if (links.total) {
-    storkblokData = await storyblokApi.get(`cdn/stories/category${tree.path}`, {
+    storkblokData = await storyblokApi.get(`cdn/stories/category/${categoryId}`, {
       version: 'draft',
     });
     storkblokData = storkblokData.data;
