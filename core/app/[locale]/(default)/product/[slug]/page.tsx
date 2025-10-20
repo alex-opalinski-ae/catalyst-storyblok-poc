@@ -307,7 +307,7 @@ export default async function Product({ params, searchParams }: Props) {
   let storkblokData;
 
   if (links.total) {
-    storkblokData = await storyblokApi.get(`cdn/stories/product${productId}`, {
+    storkblokData = await storyblokApi.get(`cdn/stories/product/${productId}`, {
       version: 'draft',
     });
     storkblokData = storkblokData.data;
